@@ -1,0 +1,3 @@
+/home/login/ProjectSO/cmake-build-debug/CMakeFiles/ProjectSO.dir
+/home/login/ProjectSO/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/login/ProjectSO/cmake-build-debug/CMakeFiles/rebuild_cache.dir

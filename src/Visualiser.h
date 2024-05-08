@@ -1,20 +1,27 @@
-#ifndef VISUALISER_HPP
-#define VISUALISER_HPP
+//
+// Created by login on 28.04.24.
+//
 
+#ifndef VISUALISER_H
+#define VISUALISER_H
+#include <src/Customer.h>
 #include <iostream>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+#include <memory>
+#include <vector>
 
 
 class Visualiser {
-private:
-    GLFWwindow* window;
-
 public:
-    Visualiser();
-    ~Visualiser();
-    bool init(int width, int height, const char* title);
-    void run();
+    Visualiser() = default;
+    ~Visualiser() = default;
+    int init();
+    static int run(std::shared_ptr<std::vector<std::shared_ptr<Customer>>> customersPtr, int winwidth, int winheigth);
+    int close();
+    int heigth = 0;
+    int width = 0;
+
 };
 
-#endif // VISUALISER_HPP
+
+
+#endif //VISUALISER_H

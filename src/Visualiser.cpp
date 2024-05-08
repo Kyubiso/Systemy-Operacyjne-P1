@@ -1,69 +1,70 @@
+//
+// Created by login on 28.04.24.
+//
+
 #include "Visualiser.h"
 
-#include <cmath>
+#include <memory>
 
-Visualiser::Visualiser() : window(nullptr) {}
+#include "ncurses.h"
+#include "thread"
+#include "chrono"
+#include "unistd.h"
 
-Visualiser::~Visualiser() {
-    if (window != nullptr) {
-        glfwDestroyWindow(window);
-        glfwTerminate();
+int Visualiser::init()
+{
+    char txt[]= "Let it go...";
+    initscr();
+    getmaxyx(stdscr, heigth, width);
+    keypad(stdscr, TRUE);
+    if (has_colors() == FALSE)
+    {
+        printw("Konsola nie obsluguje kolorow");
+        return 0;
     }
+    start_color();
+    init_pair(1, COLOR_BLACK, COLOR_GREEN);
+    attron(COLOR_PAIR(1));
+    attron(A_BOLD);
+    mvprintw(heigth/2, (width/2) - (sizeof(txt)/2), txt);
+    attroff(COLOR_PAIR(1));
+    getch();
+    nodelay(stdscr, TRUE);
+    clear();
+    return 0;
 }
+int Visualiser::run(std::shared_ptr<std::vector<std::shared_ptr<Customer>>> customersPtr, int winwidth, int winheigth)
+{
+    clear();
+    if (!customersPtr) printw("Błąd wskaźnika klientów");
+    int ch;
 
-bool Visualiser::init(int width, int height, const char* title) {
-    // Inicjalizacja biblioteki GLFW
-    if (!glfwInit()) {
-        std::cerr << "Failed to initialize GLFW" << std::endl;
-        return false;
-    }
-
-    // Ustawienie wersji OpenGL (opcjonalne)
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    // Utworzenie okna
-    window = glfwCreateWindow(width, height, title, NULL, NULL);
-    if (window == nullptr) {
-        std::cerr << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return false;
-    }
-
-    // Ustawienie kontekstu OpenGL dla okna
-    glfwMakeContextCurrent(window);
-
-    // Inicjalizacja GLEW (lub innego narzędzia do zarządzania rozszerzeniami OpenGL)
-    glewExperimental = GL_TRUE; // Potrzebne w niektórych systemach
-    if (glewInit() != GLEW_OK) {
-        std::cerr << "Failed to initialize GLEW" << std::endl;
-        return false;
-    }
-
-    return true;
-}
-
-void Visualiser::run() {
-    // Pętla renderowania
-    float color = 0.0f;
-
-    while (!glfwWindowShouldClose(window)) {
-        color+= 0.001f;
-        // Ustawienie koloru tła na niebieski tylko podczas czyszczenia bufora koloru
-        glClearColor(0.5f, color, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        glPointSize(5.0); // Ustawienie rozmiaru punktu na 5 pikseli
-        glBegin(GL_POINTS); // Rozpoczęcie rysowania punktu
-        glVertex2f(0.0, 0.0); // Współrzędne punktu (0,0)
-        glEnd(); // Zakończenie rysowania punktu
-        GLenum error = glGetError();
-        if (error != GL_NO_ERROR) {
-            std::cerr << "OpenGL error: " << error << std::endl;
+        if(customersPtr->front()->getX()>winwidth)
+        {
+            customersPtr->erase(customersPtr->begin());
         }
-        glfwSwapBuffers(window);
-
-        // Obsługa zdarzeń
-        glfwPollEvents();
-    }
+        refresh();
+        const auto& customers = *customersPtr;
+        for(const auto& customer : customers)
+        {
+            mvprintw(customer->getY(), customer->getX(), customer->getAscii());
+            customer->move(1,0);
+            getch();
+        }
+        usleep(1000000);
+        clear();
+    move(9,0);
+    printw("Koniec programu, wcisnij dowolny przycisk...");
+    getch();
+    endwin();
+    return 0;
 }
+
+int Visualiser::close()
+{
+    endwin();
+    return 0;
+}
+
+
+

@@ -14,7 +14,7 @@ class CustomerGenerator {
 public:
     CustomerGenerator() = default;
     ~CustomerGenerator() = default;
-   static int run(std::shared_ptr<std::vector<std::shared_ptr<Customer>>> customersPtr, int winwidth, int winheigth);
+   void run(std::shared_ptr<std::vector<std::shared_ptr<Customer>>> customersPtr, int winwidth, int winheigth, bool& stopFlag);
 private:
     std::shared_ptr<std::vector<std::shared_ptr<Customer>>> customers;
 };

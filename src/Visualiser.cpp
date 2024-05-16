@@ -17,6 +17,7 @@ int Visualiser::init()
     initscr();
     getmaxyx(stdscr, heigth, width);
     keypad(stdscr, TRUE);
+    noecho();
     if (has_colors() == FALSE)
     {
         printw("Konsola nie obsluguje kolorow");
@@ -26,45 +27,65 @@ int Visualiser::init()
     init_pair(1, COLOR_BLACK, COLOR_GREEN);
     attron(COLOR_PAIR(1));
     attron(A_BOLD);
-    mvprintw(heigth/2, (width/2) - (sizeof(txt)/2), txt);
+    mvprintw(heigth/2, (width/2) - (sizeof(txt)/2), "%s", txt);
     attroff(COLOR_PAIR(1));
     getch();
     nodelay(stdscr, TRUE);
     clear();
     return 0;
 }
-int Visualiser::run(std::shared_ptr<std::vector<std::shared_ptr<Customer>>> customersPtr, int winwidth, int winheigth)
+void Visualiser::run(std::shared_ptr<std::vector<std::shared_ptr<Customer>>> customersPtr, Distributor * distributor, bool& stopFlag)
 {
-    clear();
-    if (!customersPtr) printw("Błąd wskaźnika klientów");
-    int ch;
-
-        if(customersPtr->front()->getX()>winwidth)
-        {
-            customersPtr->erase(customersPtr->begin());
+    char ch;
+    while((ch = getch())!='x'){
+        clear();
+        init_pair(1, COLOR_BLACK, COLOR_RED);
+        init_pair(2, COLOR_BLACK, COLOR_CYAN);
+        init_pair(3, COLOR_BLACK, COLOR_GREEN);
+        attron(COLOR_PAIR(1));
+        mvprintw(distributor->yCorr, distributor->xCorr, " ");
+        attroff(COLOR_PAIR(1));
+        attron(COLOR_PAIR(2));
+        for(Station station : distributor->stations){
+            if (station.id == distributor->currentStation.id)
+            {
+               attron(COLOR_PAIR(3));
+               mvprintw(station.yCorr, station.xCorr, " ");
+               attroff(COLOR_PAIR(3));
+            }
+            else{
+                attron(COLOR_PAIR(2));
+                mvprintw(station.yCorr, station.xCorr, " ");
+                attroff(COLOR_PAIR(2));
+            }
+            
+            
         }
-        refresh();
+        attroff(COLOR_PAIR(2));
+        if (!customersPtr) printw("Błąd wskaźnika klientów");
+        int ch;
+        // if(customersPtr->front()->getX()>winwidth)
+        // {
+        //     customersPtr->erase(customersPtr->begin());
+        // }
         const auto& customers = *customersPtr;
         for(const auto& customer : customers)
         {
             mvprintw(customer->getY(), customer->getX(), customer->getAscii());
-            customer->move(1,0);
-            getch();
         }
-        usleep(1000000);
-        clear();
-    move(9,0);
-    printw("Koniec programu, wcisnij dowolny przycisk...");
+        refresh();
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    }
+    stopFlag=1;
+    echo();
+    clear();
+    mvprintw(0,0, "Koniec wykonywania programu...");
     getch();
-    endwin();
-    return 0;
 }
 
-int Visualiser::close()
-{
+Visualiser::~Visualiser(){
     endwin();
-    return 0;
 }
-
 
 

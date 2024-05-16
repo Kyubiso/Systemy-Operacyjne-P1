@@ -1,30 +1,31 @@
 #include <iostream>
 #include <memory>
-#include <GLFW/glfw3.h>
-#include <src/Visualiser.h>
-#include <src/Customer.h>
+#include "src/Customer.h"
+#include "src/CustomerGenerator.h"
+#include "src/Distributor.h"
+#include "src/Visualiser.h"
 #include <ncurses.h>
 #include <thread>
 #include <vector>
 
-#include "src/CustomerGenerator.h"
-
 int main() {
     Visualiser window;
+    CustomerGenerator customerGenerator;
+    bool stopFlag;
+    bool * flagPtr = &stopFlag;
     window.init();
     auto customers = std::make_shared<std::vector<std::shared_ptr<Customer>>>();
+    customers->reserve(100);
+    Distributor distributor(window.width, window.heigth, customers, stopFlag);
+
     for (int i=0; i<3; i++)
     {
-        std::shared_ptr<Customer> newCustomer = std::make_shared<Customer>(0, window.heigth/2);
+        std::shared_ptr<Customer> newCustomer = std::make_shared<Customer>(0, window.heigth/2, window.width, flagPtr);
         newCustomer->setX(2*i);
         customers->push_back(newCustomer);
     }
-    int ch;
-    while ((ch = getch())!='x')
-    {
-        std::thread worker1(CustomerGenerator::run, customers, window.width, window.heigth); //TODO zrób ten wątek
-        std::thread worker2(Visualiser::run, customers, window.width, window.heigth);
-        worker1.join();
-        worker2.join();
-    }
+    
+    std::thread worker1(&CustomerGenerator::run, &customerGenerator, customers, window.width, window.heigth, std::ref(stopFlag)); //TODO zrób ten wątek
+    window.run(customers, &distributor, stopFlag);
+    worker1.join();
 }

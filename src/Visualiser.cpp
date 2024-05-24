@@ -18,6 +18,7 @@ int Visualiser::init()
     getmaxyx(stdscr, heigth, width);
     keypad(stdscr, TRUE);
     noecho();
+    curs_set(0);
     if (has_colors() == FALSE)
     {
         printw("Konsola nie obsluguje kolorow");
@@ -63,7 +64,6 @@ void Visualiser::run(std::shared_ptr<std::vector<std::shared_ptr<Customer>>> cus
         }
         attroff(COLOR_PAIR(2));
         if (!customersPtr) printw("Błąd wskaźnika klientów");
-        int ch;
         // if(customersPtr->front()->getX()>winwidth)
         // {
         //     customersPtr->erase(customersPtr->begin());
@@ -75,7 +75,7 @@ void Visualiser::run(std::shared_ptr<std::vector<std::shared_ptr<Customer>>> cus
         }
         refresh();
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(16));
     }
     stopFlag=1;
     echo();

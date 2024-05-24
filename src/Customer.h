@@ -24,7 +24,6 @@ public:
 
 private:
     int x,y;
-    //od 33 do 122
     char symbol;
     int speed;
     int winwidth;

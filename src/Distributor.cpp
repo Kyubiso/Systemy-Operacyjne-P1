@@ -5,8 +5,7 @@ Distributor::Distributor(int winwidth, int winheigth, std::shared_ptr<std::vecto
 
     width = winwidth;
     heigth = winheigth;
-    // xCorr = winwidth/2;
-    xCorr = 20;
+    xCorr = 35; //Main distributor x
     yCorr = winheigth/2;
     stopFlagPtr = &stopFlag;
     stations[0].yCorr = winheigth/3;
@@ -44,7 +43,7 @@ void Distributor::switchStation(){
     int i = 0;
     while (*stopFlagPtr!=true)
     {
-        if (i>2) {
+        if (i==2) {
             i=0;
         }
        else{

@@ -25,7 +25,7 @@ int main() {
         customers->push_back(newCustomer);
     }
     
-    std::thread worker1(&CustomerGenerator::run, &customerGenerator, customers, window.width, window.heigth, std::ref(stopFlag)); //TODO zrób ten wątek
+    std::thread worker1(&CustomerGenerator::run, &customerGenerator, customers, window.width, window.heigth, std::ref(stopFlag));
     window.run(customers, &distributor, stopFlag);
     worker1.join();
 }

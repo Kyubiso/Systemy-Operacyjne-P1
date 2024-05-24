@@ -13,8 +13,8 @@ Customer::Customer(float x_, float y_, int width, bool * stopflag)
     winwidth = width;
     std::random_device rd;  // Inicjalizacja generatora liczb losowych
     std::mt19937 gen(rd()); // Ustawienie generatora na generator Mersenne Twister
-    std::uniform_int_distribution<int> distribution(65, 70 ); // Dystrybucja od 33 do 122
-    std::uniform_int_distribution<int> speedDistribution(300, 400); // Dystrybucja od 33 do 122
+    std::uniform_int_distribution<int> distribution(65, 90 ); // ZNaki od A do Z
+    std::uniform_int_distribution<int> speedDistribution(100, 400); // Dystrybucja predkosci
     stopFlagPtr = stopflag;
     symbol = (char)distribution(gen);
     speed = speedDistribution(gen);

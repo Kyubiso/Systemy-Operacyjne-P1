@@ -5,6 +5,9 @@
 #include "Customer.h"
 #include "random"
 #include <cstdlib>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
 
 Customer::Customer(float x_, float y_, int width, bool * stopflag)
 {
@@ -72,5 +75,11 @@ void Customer::setWaitFlag(){
     waitFlag = 0;
 }
 
+ void Customer::generateGUID() {
+        id = boost::uuids::random_generator()();
+    }
 
+std::string Customer::getIDAsString() const {
+    return boost::uuids::to_string(id);
+    }
 

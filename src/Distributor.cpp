@@ -34,6 +34,10 @@ void Distributor::checkCustomers(std::shared_ptr<std::vector<std::shared_ptr<Cus
             if(customer->getX() == xCorr){
                 customer->setY(currentStation.yCorr);
             }
+
+            if(customer->getX() == 3*width/4){
+                customer->setWaitFlag();
+            }
         }
     }
     

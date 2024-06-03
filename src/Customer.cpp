@@ -52,8 +52,11 @@ void Customer::updateLocation()
 {
 while(*stopFlagPtr!=true)
 {  
+    if(waitFlag!=1){
+
     move(1,0);
     std::this_thread::sleep_for(std::chrono::milliseconds(speed));
+    }
 }    
 
 }
@@ -61,6 +64,12 @@ while(*stopFlagPtr!=true)
 char* Customer::getAscii()
 {
     return &symbol;
+}
+
+void Customer::setWaitFlag(){
+    waitFlag = 1;
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    waitFlag = 0;
 }
 
 

@@ -18,11 +18,13 @@ public:
     int getY() const;
     void setX(int x);
     void setY(int y);
+    void setWaitFlag();
     void move(int x2, int y2);
     char* getAscii();
     void updateLocation();
 
 private:
+    bool waitFlag = 0;
     int x,y;
     char symbol;
     int speed;

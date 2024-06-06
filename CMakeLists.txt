@@ -15,6 +15,8 @@ add_executable(ProjectSO main.cpp
         src/CustomerGenerator.h
         src/Distributor.h
         src/Distributor.cpp
+        src/CustomerManager.hpp
+        src/CustomerManager.cpp
 )
 target_compile_options(ProjectSO PRIVATE -std=c++11 -Wall -Wextra)
 target_link_libraries(ProjectSO PRIVATE ${CURSES_LIBRARIES})

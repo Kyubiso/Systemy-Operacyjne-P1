@@ -3,6 +3,7 @@
 #include <vector>
 #include <thread>
 #include <memory>
+#include <unordered_set>
 #include "src/Customer.h"
 struct Station{
     int xCorr;
@@ -12,9 +13,9 @@ struct Station{
 
 class Distributor{
     public:
-    Distributor(int winwidth, int winheigth, std::shared_ptr<std::vector<std::shared_ptr<Customer>>> customers, bool& stopFlag);
+    Distributor(int winwidth, int winheigth, std::shared_ptr<std::unordered_set<std::shared_ptr<Customer>>> customers, bool& stopFlag);
     ~Distributor();
-    void checkCustomers(std::shared_ptr<std::vector<std::shared_ptr<Customer>>> customersPtr);
+    void checkCustomers(std::shared_ptr<std::unordered_set<std::shared_ptr<Customer>>> customersPtr);
     void switchStation();
     int xCorr;
     int yCorr;
@@ -22,7 +23,7 @@ class Distributor{
     Station currentStation;
 
     private:
-    std::shared_ptr<std::vector<std::shared_ptr<Customer>>> customersPtr;
+    std::shared_ptr<std::unordered_set<std::shared_ptr<Customer>>> customersPtr;
     int width;
     int heigth;
     bool * stopFlagPtr;

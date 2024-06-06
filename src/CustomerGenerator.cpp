@@ -8,8 +8,9 @@
 #include <random>
 #include <thread>
 #include <utility>
+#include <unordered_set>
 
-void CustomerGenerator::run(std::shared_ptr<std::vector<std::shared_ptr<Customer>>> customersPtr, int winwidth, int winheigth, bool& stopFlag)
+void CustomerGenerator::run(std::shared_ptr<std::unordered_set<std::shared_ptr<Customer>>> customersPtr, int winwidth, int winheigth, bool& stopFlag)
 {
     while(stopFlag!=true)
     {
@@ -20,7 +21,7 @@ void CustomerGenerator::run(std::shared_ptr<std::vector<std::shared_ptr<Customer
         int delay = dis(gen);
         std::this_thread::sleep_for(std::chrono::milliseconds(delay));
         std::shared_ptr<Customer> newCustomer = std::make_shared<Customer>(0, winheigth/2, winwidth, reference);
-        customersPtr->push_back(newCustomer);
+        customersPtr->emplace(newCustomer);
     }
 }
 

@@ -56,9 +56,8 @@ void Customer::updateLocation()
 while(*stopFlagPtr!=true)
 {  
     if(waitFlag!=1){
-
-    move(1,0);
-    std::this_thread::sleep_for(std::chrono::milliseconds(speed));
+        move(1,0);
+        std::this_thread::sleep_for(std::chrono::milliseconds(speed));
     }
 }    
 

@@ -1,7 +1,7 @@
 #include "Distributor.h"
 
 
-Distributor::Distributor(int winwidth, int winheigth, std::shared_ptr<std::vector<std::shared_ptr<Customer>>> customers, bool& stopFlag){
+Distributor::Distributor(int winwidth, int winheigth, std::shared_ptr<std::unordered_set<std::shared_ptr<Customer>>> customers, bool& stopFlag){
 
     width = winwidth;
     heigth = winheigth;
@@ -26,7 +26,7 @@ Distributor::Distributor(int winwidth, int winheigth, std::shared_ptr<std::vecto
 
 }
 
-void Distributor::checkCustomers(std::shared_ptr<std::vector<std::shared_ptr<Customer>>> customersPtr){
+void Distributor::checkCustomers(std::shared_ptr<std::unordered_set<std::shared_ptr<Customer>>> customersPtr){
     while (*stopFlagPtr!=true)
     {
     for(auto customer : *customersPtr)

@@ -16,9 +16,9 @@ public:
     Visualiser() = default;
     ~Visualiser();
     int init();
-    static void run(std::shared_ptr<std::vector<std::shared_ptr<Customer>>> customersPtr, Distributor * distributor, bool& stopFlag);
+    static void run(std::shared_ptr<std::unordered_set<std::shared_ptr<Customer>>> customersPtr, Distributor * distributor, bool& stopFlag, int width);
     int heigth = 0;
-    int width = 0;
+    int width;
 
 };
 

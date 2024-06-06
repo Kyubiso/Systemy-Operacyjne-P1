@@ -10,6 +10,7 @@
 #include "thread"
 #include "chrono"
 #include "unistd.h"
+#include <mutex>
 
 int Visualiser::init()
 {
@@ -35,9 +36,10 @@ int Visualiser::init()
     clear();
     return 0;
 }
-void Visualiser::run(std::shared_ptr<std::vector<std::shared_ptr<Customer>>> customersPtr, Distributor * distributor, bool& stopFlag)
+void Visualiser::run(std::shared_ptr<std::unordered_set<std::shared_ptr<Customer>>> customersPtr, Distributor * distributor, bool& stopFlag, int width)
 {
     char ch;
+    std::mutex mutex;
     while((ch = getch())!='x'){
         clear();
         init_pair(1, COLOR_BLACK, COLOR_RED);
@@ -64,14 +66,14 @@ void Visualiser::run(std::shared_ptr<std::vector<std::shared_ptr<Customer>>> cus
         }
         attroff(COLOR_PAIR(2));
         if (!customersPtr) printw("Błąd wskaźnika klientów");
-        // if(customersPtr->front()->getX()>winwidth)
-        // {
-        //     customersPtr->erase(customersPtr->begin());
-        // }
         const auto& customers = *customersPtr;
         for(const auto& customer : customers)
         {
             mvprintw(customer->getY(), customer->getX(), customer->getAscii());
+            if (customer->getX()>width){
+                std::lock_guard<std::mutex> lock(mutex); //Nie działa :)
+                customersPtr->erase(customer);
+            }
         }
         refresh();
 

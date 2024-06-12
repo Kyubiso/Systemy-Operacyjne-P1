@@ -36,11 +36,11 @@ int Visualiser::init()
     clear();
     return 0;
 }
-void Visualiser::run(std::shared_ptr<CustomersManager> customersPtr, Distributor * distributor, bool& stopFlag, int width)
+void Visualiser::run(std::shared_ptr<CustomersManager> customersPtr, std::shared_ptr<Distributor> distributor, bool& stopFlag, int width)
 {
     char ch;
     while((ch = getch())!='x'){
-        clear();
+        erase();
         init_pair(1, COLOR_BLACK, COLOR_RED);
         init_pair(2, COLOR_BLACK, COLOR_CYAN);
         init_pair(3, COLOR_BLACK, COLOR_GREEN);
@@ -69,11 +69,8 @@ void Visualiser::run(std::shared_ptr<CustomersManager> customersPtr, Distributor
         for(const auto& customer : *customersPtr->customers)
         {
             mvprintw(customer->getY(), customer->getX(), customer->getAscii());
-            refresh();
-            if (customer->getX()>width){
-                customersPtr->removeCustomer(customer);
-            }
         }
+        //refresh();
         std::this_thread::sleep_for(std::chrono::milliseconds(16));
     }
     stopFlag=1;

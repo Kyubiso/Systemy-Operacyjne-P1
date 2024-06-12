@@ -10,6 +10,7 @@
 
 #include "Customer.h"
 #include "CustomersManager.h"
+#include "Distributor.h"
 
 
 
@@ -17,7 +18,7 @@ class CustomerGenerator {
 public:
     CustomerGenerator() = default;
     ~CustomerGenerator() = default;
-   void run(std::shared_ptr<CustomersManager> customersPtr, int winwidth, int winheigth, bool& stopFlag);
+   void run(std::shared_ptr<CustomersManager> customersPtr, int winwidth, int winheigth, bool& stopFlag,  std::shared_ptr<Distributor> distributor);
 private:
     std::shared_ptr<std::unordered_set<std::shared_ptr<Customer>>> customers;
 };

@@ -3,9 +3,9 @@
 #include <vector>
 #include <thread>
 #include <memory>
+#include <mutex>
 #include <unordered_set>
-#include "CustomersManager.h"
-#include "Customer.h"
+
 
 struct Station{
     int xCorr;
@@ -15,21 +15,25 @@ struct Station{
 
 class Distributor{
     public:
-    Distributor(int winwidth, int winheigth, std::shared_ptr<CustomersManager> customers, bool& stopFlag);
+    Distributor(int winwidth, int winheigth, bool& stopFlag);
     ~Distributor();
-    void checkCustomers(std::shared_ptr<CustomersManager> customersPtr);
+    int scheduleCustomer();
+    std::mutex scheduleMutex;
+    std::mutex firstDistMutex;
+    std::mutex secondDistMutex;
+    std::mutex thirdDistMutex;
+    bool askStationifFree(int stationID);
+    void lockStation(int stationID);
     void switchStation();
     int xCorr;
     int yCorr;
     std::array<Station, 3> stations;
-    Station currentStation;
+    Station currentStation; 
 
     private:
-    std::shared_ptr<CustomersManager> customersPtr;
     int width;
     int heigth;
     bool * stopFlagPtr;
-    std::thread * threadPointer;
     std::thread * stationThreadPointer;
 
 };

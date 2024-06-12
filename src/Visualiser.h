@@ -17,7 +17,7 @@ public:
     Visualiser() = default;
     ~Visualiser();
     int init();
-    static void run(std::shared_ptr<CustomersManager> customersPtr, std::shared_ptr<Distributor> distributor, bool& stopFlag, int width);
+    static void run(std::shared_ptr<CustomersManager> customersPtr, std::shared_ptr<Distributor> distributor, bool& stopFlag);
     int heigth = 0;
     int width;
 

@@ -28,6 +28,6 @@ int main() {
     auto distributor = std::make_shared<Distributor>(window.width, window.heigth, stopFlag);
     auto customers = std::make_shared<CustomersManager>(window.width, window.heigth, flagPtr, distributor);
     std::thread worker1(&CustomerGenerator::run, &customerGenerator, customers, window.width, window.heigth, std::ref(stopFlag), distributor);
-    window.run(customers, distributor, stopFlag, window.width);
+    window.run(customers, distributor, stopFlag);
     worker1.join();
 }

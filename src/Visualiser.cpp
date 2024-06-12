@@ -36,7 +36,7 @@ int Visualiser::init()
     clear();
     return 0;
 }
-void Visualiser::run(std::shared_ptr<CustomersManager> customersPtr, std::shared_ptr<Distributor> distributor, bool& stopFlag, int width)
+void Visualiser::run(std::shared_ptr<CustomersManager> customersPtr, std::shared_ptr<Distributor> distributor, bool& stopFlag)
 {
     char ch;
     while((ch = getch())!='x'){
@@ -81,6 +81,7 @@ void Visualiser::run(std::shared_ptr<CustomersManager> customersPtr, std::shared
 }
 
 Visualiser::~Visualiser(){
+    clear();
     endwin();
 }
 

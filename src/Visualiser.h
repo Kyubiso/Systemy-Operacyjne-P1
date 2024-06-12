@@ -6,6 +6,7 @@
 #define VISUALISER_H
 #include <src/Customer.h>
 #include "src/Distributor.h"
+#include "src/CustomersManager.h"
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -16,7 +17,7 @@ public:
     Visualiser() = default;
     ~Visualiser();
     int init();
-    static void run(std::shared_ptr<std::unordered_set<std::shared_ptr<Customer>>> customersPtr, Distributor * distributor, bool& stopFlag, int width);
+    static void run(std::shared_ptr<CustomersManager> customersPtr, Distributor * distributor, bool& stopFlag, int width);
     int heigth = 0;
     int width;
 

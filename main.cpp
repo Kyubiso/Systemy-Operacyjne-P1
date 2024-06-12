@@ -4,7 +4,7 @@
 #include "src/CustomerGenerator.h"
 #include "src/Distributor.h"
 #include "src/Visualiser.h"
-#include "src/CustomerManager.hpp"
+#include "src/CustomersManager.h"
 #include <ncurses.h>
 #include <thread>
 #include <vector>
@@ -25,18 +25,14 @@ int main() {
     bool stopFlag;
     bool * flagPtr = &stopFlag;
     window.init();
-    //auto customers = std::make_shared<std::vector<std::shared_ptr<Customer>>>();
-    auto customers = std::make_shared<std::unordered_set<std::shared_ptr<Customer>>>();
-    //customers->reserve(100);
+    auto customers = std::make_shared<CustomersManager>(window.width, window.heigth, flagPtr);
     Distributor distributor(window.width, window.heigth, customers, stopFlag);
-    CustomerManager customerManager(window, flagPtr);
 
     for (int i=0; i<3; i++)
     {
         std::shared_ptr<Customer> newCustomer = std::make_shared<Customer>(0, window.heigth/2, window.width, flagPtr);
         newCustomer->setX(2*i);
-        //customers->push_back(newCustomer);
-        customers->emplace(newCustomer);
+        customers->addCustomer(newCustomer);
     }
     
     std::thread worker1(&CustomerGenerator::run, &customerGenerator, customers, window.width, window.heigth, std::ref(stopFlag));

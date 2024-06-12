@@ -9,13 +9,15 @@
 #include <unordered_set>
 
 #include "Customer.h"
+#include "CustomersManager.h"
+
 
 
 class CustomerGenerator {
 public:
     CustomerGenerator() = default;
     ~CustomerGenerator() = default;
-   void run(std::shared_ptr<std::unordered_set<std::shared_ptr<Customer>>> customersPtr, int winwidth, int winheigth, bool& stopFlag);
+   void run(std::shared_ptr<CustomersManager> customersPtr, int winwidth, int winheigth, bool& stopFlag);
 private:
     std::shared_ptr<std::unordered_set<std::shared_ptr<Customer>>> customers;
 };

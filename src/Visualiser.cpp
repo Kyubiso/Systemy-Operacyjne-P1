@@ -3,6 +3,7 @@
 //
 
 #include "Visualiser.h"
+#include "CustomersManager.h"
 
 #include <memory>
 
@@ -10,7 +11,6 @@
 #include "thread"
 #include "chrono"
 #include "unistd.h"
-#include <mutex>
 
 int Visualiser::init()
 {
@@ -36,10 +36,9 @@ int Visualiser::init()
     clear();
     return 0;
 }
-void Visualiser::run(std::shared_ptr<std::unordered_set<std::shared_ptr<Customer>>> customersPtr, Distributor * distributor, bool& stopFlag, int width)
+void Visualiser::run(std::shared_ptr<CustomersManager> customersPtr, Distributor * distributor, bool& stopFlag, int width)
 {
     char ch;
-    std::mutex mutex;
     while((ch = getch())!='x'){
         clear();
         init_pair(1, COLOR_BLACK, COLOR_RED);
@@ -66,17 +65,15 @@ void Visualiser::run(std::shared_ptr<std::unordered_set<std::shared_ptr<Customer
         }
         attroff(COLOR_PAIR(2));
         if (!customersPtr) printw("Błąd wskaźnika klientów");
-        const auto& customers = *customersPtr;
-        for(const auto& customer : customers)
+        
+        for(const auto& customer : *customersPtr->customers)
         {
             mvprintw(customer->getY(), customer->getX(), customer->getAscii());
+            refresh();
             if (customer->getX()>width){
-                std::lock_guard<std::mutex> lock(mutex); //Nie działa :)
-                customersPtr->erase(customer);
+                customersPtr->removeCustomer(customer);
             }
         }
-        refresh();
-
         std::this_thread::sleep_for(std::chrono::milliseconds(16));
     }
     stopFlag=1;

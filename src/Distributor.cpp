@@ -1,10 +1,11 @@
 #include "Distributor.h"
 
 
-Distributor::Distributor(int winwidth, int winheigth, std::shared_ptr<std::unordered_set<std::shared_ptr<Customer>>> customers, bool& stopFlag){
+Distributor::Distributor(int winwidth, int winheigth, std::shared_ptr<CustomersManager> customers, bool& stopFlag){
 
     width = winwidth;
     heigth = winheigth;
+
     xCorr = 35; //Main distributor x
     yCorr = winheigth/2;
     stopFlagPtr = &stopFlag;
@@ -26,10 +27,10 @@ Distributor::Distributor(int winwidth, int winheigth, std::shared_ptr<std::unord
 
 }
 
-void Distributor::checkCustomers(std::shared_ptr<std::unordered_set<std::shared_ptr<Customer>>> customersPtr){
+void Distributor::checkCustomers(std::shared_ptr<CustomersManager> customersPtr){
     while (*stopFlagPtr!=true)
     {
-    for(auto customer : *customersPtr)
+    for(auto customer : *customersPtr->customers)
         {
             if(customer->getX() == xCorr){
                 customer->setY(currentStation.yCorr);

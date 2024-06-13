@@ -40,14 +40,21 @@ void Visualiser::run(std::shared_ptr<CustomersManager> customersPtr, std::shared
 {
     char ch;
     while((ch = getch())!='x'){
+        char znak = '0' + distributor->maxIndex;
         erase();
         init_pair(1, COLOR_BLACK, COLOR_RED);
         init_pair(2, COLOR_BLACK, COLOR_CYAN);
         init_pair(3, COLOR_BLACK, COLOR_GREEN);
+        mvprintw(0 , 0, "%s", "Stan kolejek: ");
+        mvprintw(1 , 0, "%s", "Zablokowana kolejka: ");
+        mvprintw(1, 22, "%d", distributor->maxIndex);
         attron(COLOR_PAIR(1));
         mvprintw(distributor->yCorr, distributor->xCorr, " ");
         attroff(COLOR_PAIR(1));
         attron(COLOR_PAIR(2));
+        mvprintw(0, 15, "%d", distributor->occupancyArray[0]);
+        mvprintw(0, 16, "%d", distributor->occupancyArray[1]);
+        mvprintw(0, 17, "%d", distributor->occupancyArray[2]);
         for(Station station : distributor->stations){
             if (station.id == distributor->currentStation.id)
             {

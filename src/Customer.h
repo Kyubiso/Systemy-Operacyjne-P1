@@ -47,6 +47,7 @@ private:
     std::mutex moveMutex;
     std::shared_ptr<Distributor> distributor;
     bool waitFlag = 0;
+    bool isChecked = 0;
     int x,y;
     char symbol;
     int speed;

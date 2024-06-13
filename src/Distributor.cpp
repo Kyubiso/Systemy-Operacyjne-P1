@@ -21,8 +21,6 @@ Distributor::Distributor(int winwidth, int winheigth, bool& stopFlag){
     stations[1].id = 1;
     stations[2].id = 2;
 
-    // customersPtr = customers;
-   // threadPointer = new std::thread(&Distributor::checkCustomers, this, customersPtr);
     stationThreadPointer = new std::thread(&Distributor::switchStation, this);
 
 }
@@ -37,12 +35,14 @@ void Distributor::switchStation(){
     while (*stopFlagPtr!=true)
     {
         scheduleMutex.lock();
-        if (i==2) {
-            i=0;
+        maxIndex = findMaxIndex();
+        i++;
+        i = i%3;
+        if (i == maxIndex)
+        {
+            i = (maxIndex+1)%3;
         }
-       else{
-            i++;
-       }
+        
         currentStation = stations[i];
         scheduleMutex.unlock();
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
@@ -54,20 +54,20 @@ bool Distributor::askStationifFree(int stationID){
     std::lock_guard<std::mutex> lock(scheduleMutex);
     bool permission = 0;
     switch(stationID){
-        case 1:
+        case 0:
              if(firstDistMutex.try_lock()){
                 permission=1;
                 firstDistMutex.unlock();
              }
              
             break;
-        case 2:
+        case 1:
             if(secondDistMutex.try_lock()){
                 permission=1;
                 secondDistMutex.unlock();
              }
             break;
-        case 3:
+        case 2:
             if(thirdDistMutex.try_lock()){
                 permission=1;
                 thirdDistMutex.unlock();
@@ -82,17 +82,17 @@ bool Distributor::askStationifFree(int stationID){
 
 void Distributor::lockStation(int stationID){
     switch(stationID){
-        case 1:{
+        case 0:{
             std::lock_guard<std::mutex> lock(firstDistMutex);
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
             break;
         }
-        case 2:
+        case 1:
         {
             std::lock_guard<std::mutex> lock(secondDistMutex);
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
             break;}
-        case 3:
+        case 2:
         {
             std::lock_guard<std::mutex> lock(thirdDistMutex);
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
@@ -102,6 +102,21 @@ void Distributor::lockStation(int stationID){
             break;
     }
 }
+
+void Distributor::changeStationOccupancy(int stationID, int value){
+    std::lock_guard<std::mutex> lock(occupancyMutex);
+    occupancyArray[stationID]+=value;
+}
+
+int Distributor::findMaxIndex(){
+    int maxIndex = 0;
+    for (int i = 0; i < 3; i++)
+    {
+        if (occupancyArray[i]>occupancyArray[maxIndex])  maxIndex = i;
+    }
+    return maxIndex;    
+}
+
 
 Distributor::~Distributor(){
     stationThreadPointer->join();

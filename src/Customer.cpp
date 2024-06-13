@@ -66,24 +66,28 @@ void Customer::updateLocation()
 bool permission;
 while(*stopFlagPtr!=true)
 {  
-    if(waitFlag!=1){
         if(x == distributor->xCorr && y == distributor->yCorr){
             int distributorY = distributor->scheduleCustomer();
-            moveTo(x, distributorY);
+            moveTo(x+1, distributorY);
             if (y >= distributor->yCorr)
             {
-               if (y == distributor->yCorr) stationID = 2;
-               else stationID = 3;
+               if (y == distributor->yCorr) stationID = 1;
+               else stationID = 2;
             }
-            else stationID = 1;
+            else stationID = 0;
         }
 
         else if(x > winwidth + 10){
+            if (!toRemove)
+            {
+                distributor->changeStationOccupancy(stationID, -1);
+            }
             toRemove = true;
+           
         }
         
         else if (x == distributor->currentStation.xCorr-1){
-            bool permission = distributor->askStationifFree(stationID);
+            permission = distributor->askStationifFree(stationID);
            if (permission)
             {
                 move(1,0);
@@ -92,8 +96,13 @@ while(*stopFlagPtr!=true)
         }
         else move(1,0);
         
+        if (x == distributor->xCorr+1)
+        {
+            if(!isChecked) distributor->changeStationOccupancy(stationID, 1);
+            isChecked = true;
+        }
+        
         std::this_thread::sleep_for(std::chrono::milliseconds(speed));
-    }
 }    
 
 }
@@ -105,7 +114,7 @@ char* Customer::getAscii()
 
 void Customer::setWaitFlag(){
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    waitFlag = 0;
+ 
 }
 
  void Customer::generateGUID() {

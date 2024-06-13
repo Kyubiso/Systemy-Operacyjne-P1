@@ -23,8 +23,6 @@ private:
     std::shared_ptr<Distributor> distributor;
     void checkCustomersToRemove();
     std::thread * threadPointer;
-
-
 };
 
 #endif //CUSTOMERSMANAGER_H

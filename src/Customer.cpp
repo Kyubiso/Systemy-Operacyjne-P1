@@ -66,6 +66,7 @@ void Customer::updateLocation()
 bool permission;
 while(*stopFlagPtr!=true)
 {  
+        //Assigning to Stations
         if(x == distributor->xCorr && y == distributor->yCorr){
             int distributorY = distributor->scheduleCustomer();
             moveTo(x+1, distributorY);
@@ -76,7 +77,7 @@ while(*stopFlagPtr!=true)
             }
             else stationID = 0;
         }
-
+        //Removing Past Clients
         else if(x > winwidth + 10){
             if (!toRemove)
             {
@@ -85,7 +86,7 @@ while(*stopFlagPtr!=true)
             toRemove = true;
            
         }
-        
+        //Checking and Moving to Service Point
         else if (x == distributor->currentStation.xCorr-1){
             permission = distributor->askStationifFree(stationID);
            if (permission)
@@ -95,7 +96,7 @@ while(*stopFlagPtr!=true)
            }
         }
         else move(1,0);
-        
+        //Marking Client as Counted 
         if (x == distributor->xCorr+1)
         {
             if(!isChecked) distributor->changeStationOccupancy(stationID, 1);

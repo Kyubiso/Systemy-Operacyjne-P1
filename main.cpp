@@ -9,6 +9,13 @@
 #include <thread>
 #include <vector>
 #include <unordered_set>
+/*Projekt z przedmiotu Systemy Operacyjne 2
+Zadanie: Zaprojektować symulacje systemu kolejek w którym klienci poruszają się w strone stacji i są rozdzielani
+na jedną  trzech stacji przed Dystrybutor. Klienci poruszają się niezależnie z losowymi prędkościami i zatrzymują się
+na chwilę na jednej z trzech stacji końcowych. 
+Wymagania na Etap 2:
+    -Tylko jeden klient może być obsługiwany na raz w jednej stacji
+    -Najbardziej zajęta stacja ma być wyłączona z puli stacji, do których idą klienci*/
 
 namespace std {
     template <>
